@@ -1,35 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { getUsers } from "../../actions/usuariosActions";
+import Fatal from "../general/Fatal";
+import Spinner from "../general/Spinner";
+import Table from "./Table";
 
-const Usuarios = ({ usuarios, getUsers }) => {
+const Usuarios = ({ usuarios, getUsers, loading, error }) => {
   useEffect(() => {
     getUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const ponerFilas = () =>
-    usuarios.map((usuario) => (
-      <tr key={usuario.id}>
-        <td>{usuario.name}</td>
-        <td>{usuario.email}</td>
-        <td>{usuario.website}</td>
-      </tr>
-    ));
-
-  return (
-    <div>
-      <table className="tabla">
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Correo</th>
-            <th>Enlace</th>
-          </tr>
-        </thead>
-        <tbody>{ponerFilas()}</tbody>
-      </table>
-    </div>
-  );
+  if (loading) return <Spinner />;
+  else if (error) return <Fatal error={error} />;
+  else return <Table usuarios={usuarios} />;
 };
 
 const mapStateToProps = (state) => {
