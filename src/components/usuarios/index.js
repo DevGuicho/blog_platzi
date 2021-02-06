@@ -1,18 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
+import { getUsers } from "../../actions/usuariosActions";
 
-const Usuarios = () => {
-  const [usuarios, setUsuarios] = useState([]);
+const Usuarios = ({ usuarios, getUsers }) => {
   useEffect(() => {
-    const obtenerUsuarios = async () => {
-      const respuesta = await axios.get(
-        "https://jsonplaceholder.typicode.com/users"
-      );
-
-      setUsuarios(respuesta.data);
-    };
-    obtenerUsuarios();
-  });
+    getUsers();
+  }, []);
 
   const ponerFilas = () =>
     usuarios.map((usuario) => (
@@ -43,6 +36,8 @@ const mapStateToProps = (state) => {
   return state.usuariosReducer;
 };
 
-export default connect(mapStateToProps, {
-  /*Accion Creator*/
-})(Usuarios);
+const mapDispatchToProps = {
+  getUsers,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Usuarios);
